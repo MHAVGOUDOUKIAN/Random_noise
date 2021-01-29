@@ -71,6 +71,7 @@ void Grid::update()
 		m_cursor[1] = 1;
 	}
 	
+	getNeighboorMean(m_cursor[0], m_cursor[1]);
 	unsigned seed = std::chrono::steady_clock::now().time_since_epoch().count();
 	std::default_random_engine generator(seed);
     std::normal_distribution<double> distN_R(m_valR, 20.);

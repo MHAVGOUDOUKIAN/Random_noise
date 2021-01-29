@@ -30,9 +30,9 @@ private :
 	
 private :
 	
-	static constexpr int m_dim = 502;
-	int m_valR, m_valG, m_valB;
-	sf::Color m_table[m_dim][m_dim]{};
+	static constexpr int m_dim = 202;
+	double m_valR, m_valG, m_valB;
+	sf::Color m_table[m_dim][m_dim]{sf::Color::Black};
 	std::vector<unsigned> m_cursor;
 	Direction m_direction;
 	unsigned m_level;
