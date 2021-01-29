@@ -31,6 +31,8 @@ void Grid::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	}
 }
 
+
+
 void Grid::modif(int numRow, int numCol, int new_value)
 {
 	m_table[numRow][numCol] = new_value;
@@ -59,4 +61,24 @@ void Grid::update()
 		}
 	}
 	*/
+}
+
+float Grid::getNeighboorMid(const int x, const int y) const
+{
+	float res=0;
+	int count=0;
+
+	// Voisins des cotés ?
+	if( m_table[x-1][y] != 0 ) { res += m_table[x-1][y]; count++; }
+	if( m_table[x+1][y] != 0 ) { res += m_table[x+1][y]; count++; }
+	if( m_table[x][y-1] != 0 ) { res += m_table[x][y-1]; count++; }
+	if( m_table[x][y+1] != 0 ) { res += m_table[x][y+1]; count++; }
+
+	// Voisins des diagonales ? 
+	if( m_table[x-1][y-1] != 0 ) { res += m_table[x-1][y-1]; count++; }
+	if( m_table[x+1][y+1] != 0 ) { res += m_table[x+1][y+1]; count++; }
+	if( m_table[x-1][y+1] != 0 ) { res += m_table[x-1][y+1]; count++; }
+	if( m_table[x+1][y-1] != 0 ) { res += m_table[x+1][y-1]; count++; }
+
+	return res / count; 
 }
