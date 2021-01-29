@@ -25,13 +25,13 @@ public :
 private :
 	
 	virtual void draw(sf::RenderTarget&, sf::RenderStates) const;
-	void modif(int, int, int);
+	void modif(int, int, sf::Color);
 	void toggleDirection();
 	
 private :
 	
-	static constexpr int m_dim = 202;
-	int m_table[m_dim][m_dim]{};
+	static constexpr int m_dim = 500;
+	sf::Color m_table[m_dim][m_dim]{};
 	std::vector<unsigned> m_cursor;
 	Direction m_direction;
 	unsigned m_level;

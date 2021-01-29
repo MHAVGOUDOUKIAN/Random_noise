@@ -7,7 +7,7 @@ Grid::Grid()
 , m_seed(std::chrono::steady_clock::now().time_since_epoch().count())
 {
 	srand(m_seed);
-	m_table[m_cursor[0]][m_cursor[1]] = rand() % 245 + 10;
+	m_table[m_cursor[0]][m_cursor[1]] = sf::Color(rand() % 245 + 10, rand() % 245 + 10, rand() % 245 + 10);
 }
 
 void Grid::draw(sf::RenderTarget& target, sf::RenderStates states) const
@@ -23,19 +23,14 @@ void Grid::draw(sf::RenderTarget& target, sf::RenderStates states) const
 			rectangle.setOutlineColor(sf::Color::Black);
 			rectangle.setOutlineThickness(1);
 
-			int a;
-			a = m_table[i][j];
-			sf::Color gray(a, a, a);
-			rectangle.setFillColor(gray);
+			rectangle.setFillColor(m_table[i][j]);
 			
 			target.draw(rectangle, states);
 		}
 	}
 }
 
-
-
-void Grid::modif(int numRow, int numCol, int new_value)
+void Grid::modif(int numRow, int numCol, sf::Color new_value)
 {
 	m_table[numRow][numCol] = new_value;
 }
@@ -78,12 +73,20 @@ void Grid::update()
 	
 	unsigned seed = std::chrono::steady_clock::now().time_since_epoch().count();
 	std::default_random_engine generator(seed);
-	double mean = getNeighboorMean(m_cursor[0], m_cursor[1]);
-    std::normal_distribution<double> distN(mean, 25.);
-	double new_value = distN(generator);
-	new_value = round(new_value);
-	if(new_value > 255) {new_value = 255;}
-	if(new_value < 10) {new_value = 10;}
+    std::normal_distribution<double> distN_R(m_valR, 20.);
+	std::normal_distribution<double> distN_G(m_valG, 20.);
+	std::normal_distribution<double> distN_B(m_valB, 20.);
+	double r_value = round(distN_R(generator));
+	double g_value = round(distN_G(generator));
+	double b_value = round(distN_B(generator));
+	if(r_value > 255) {r_value = 255;}
+	if(r_value < 10) {r_value = 10;}
+	if(g_value > 255) {g_value = 255;}
+	if(g_value < 10) {g_value = 10;}
+	if(b_value > 255) {b_value = 255;}
+	if(b_value < 10) {b_value = 10;}
+	
+	sf::Color new_value = sf::Color(r_value, g_value, b_value);
 	
 	modif(m_cursor[0], m_cursor[1], new_value);
 }
