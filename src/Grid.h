@@ -20,7 +20,7 @@ public :
 	
 	Grid();
 	void update();
-	float getNeighboorMean(const int x, const int y) const;
+	void getNeighboorMean(const int x, const int y);
 
 private :
 	
@@ -30,7 +30,8 @@ private :
 	
 private :
 	
-	static constexpr int m_dim = 500;
+	static constexpr int m_dim = 502;
+	int m_valR, m_valG, m_valB;
 	sf::Color m_table[m_dim][m_dim]{};
 	std::vector<unsigned> m_cursor;
 	Direction m_direction;

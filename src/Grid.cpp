@@ -92,27 +92,68 @@ void Grid::update()
 }
 
 
-float Grid::getNeighboorMean(const int x, const int y) const
+void Grid::getNeighboorMean(const int x, const int y)
 {
-	float res=0;
+	m_valR=0, m_valG=0, m_valB=0;
 	int count=0;
 	
-	if(x == 0 || x == m_dim-1 || y == 0 || y == m_dim-1) { res = 0; }
+	if(x == 0 || x == m_dim-1 || y == 0 || y == m_dim-1) { m_valR = 0;  m_valG = 0;  m_valB = 0; }
 	else {
 		// Voisins des cotés ?
-		if( x-1 != 0 && m_table[x-1][y] != 0) { res += m_table[x-1][y]; count++; }
-		if( x+1 != m_dim-1 && m_table[x+1][y] != 0) { res += m_table[x+1][y]; count++; }
-		if( y-1 != 0 && m_table[x][y-1] != 0) { res += m_table[x][y-1]; count++; }
-		if( y+1 != m_dim-1 && m_table[x][y+1] != 0) { res += m_table[x][y+1]; count++; }
+		if( x-1 != 0 && m_table[x-1][y] != sf::Color::Black) { 
+			m_valR += m_table[x-1][y].r;
+			m_valG += m_table[x-1][y].g;
+			m_valB += m_table[x-1][y].b;
+			count++; 
+		}
+		if( x+1 != m_dim-1 && m_table[x+1][y] != sf::Color::Black) { 
+			m_valR += m_table[x+1][y].r;
+			m_valG += m_table[x+1][y].g;
+			m_valB += m_table[x+1][y].b;
+			count++; 
+		}
+		if( y-1 != 0 && m_table[x][y-1] != sf::Color::Black) {
+			m_valR += m_table[x][y-1].r;
+			m_valG += m_table[x][y-1].g;
+			m_valB += m_table[x][y-1].b;
+			count++; 
+		}
+		if( y+1 != m_dim-1 && m_table[x][y+1] != sf::Color::Black) { 
+			m_valR += m_table[x][y+1].r;
+			m_valG += m_table[x][y+1].g;
+			m_valB += m_table[x][y+1].b;
+			count++; 
+		}
 
 		// Voisins des diagonales ? 
-		if( x-1 != 0 && y-1 != 0 && m_table[x-1][y-1] != 0) { res += m_table[x-1][y-1]; count++; }
-		if( x+1 != m_dim-1 && y+1 != m_dim-1 && m_table[x+1][y+1] != 0) { res += m_table[x+1][y+1]; count++; }
-		if( x-1 != 0 && y+1 != m_dim-1 && m_table[x-1][y+1] != 0) { res += m_table[x-1][y+1]; count++; }
-		if( x+1 != m_dim-1 && y-1 != 0 && m_table[x+1][y-1] != 0) { res += m_table[x+1][y-1]; count++; }
+		if( x-1 != 0 && y-1 != 0 && m_table[x-1][y-1] != sf::Color::Black) {
+			m_valR += m_table[x-1][y-1].r;
+			m_valG += m_table[x-1][y-1].g;
+			m_valB += m_table[x-1][y-1].b;
+			count++; 
+		}
+		if( x+1 != m_dim-1 && y+1 != m_dim-1 && m_table[x+1][y+1] != sf::Color::Black) { 
+			m_valR += m_table[x+1][y+1].r;
+			m_valG += m_table[x+1][y+1].g;
+			m_valB += m_table[x+1][y+1].b;
+			count++; 
+		}
+		if( x-1 != 0 && y+1 != m_dim-1 && m_table[x-1][y+1] != sf::Color::Black) { 
+			m_valR += m_table[x-1][y+1].r;
+			m_valG += m_table[x-1][y+1].g;
+			m_valB += m_table[x-1][y+1].b;
 
-		res /= count; 
+			count++; 
+		}
+		if( x+1 != m_dim-1 && y-1 != 0 && m_table[x+1][y-1] != sf::Color::Black) { 
+			m_valR += m_table[x+1][y-1].r;
+			m_valG += m_table[x+1][y-1].g;
+			m_valB += m_table[x+1][y-1].b;
+			count++; 
+		}
+
+		m_valR /= count;
+		m_valG /= count;
+		m_valB /= count;
 	}
-
-	return res;
 }
