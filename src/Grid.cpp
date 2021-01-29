@@ -4,10 +4,9 @@ Grid::Grid()
 : m_cursor(2, 1)
 , m_direction(Horizontal)
 , m_level(0)
+, m_seed(std::chrono::steady_clock::now().time_since_epoch().count())
 {
-	unsigned seed = std::chrono::steady_clock::now().time_since_epoch().count();
-	srand(seed);
-	
+	srand(m_seed);
 	m_table[m_cursor[0]][m_cursor[1]] = rand() % 245 + 10;
 }
 
@@ -73,35 +72,24 @@ void Grid::update()
 	if(m_level == m_dim-2)
 	{
 		m_level = 0;
+		m_cursor[0] = 1;
+		m_cursor[1] = 1;
 	}
 	
-	modif(m_cursor[0], m_cursor[1], rand() % 245 + 10);
+	unsigned seed = std::chrono::steady_clock::now().time_since_epoch().count();
+	std::default_random_engine generator(seed);
+	double mean = getNeighboorMean(m_cursor[0], m_cursor[1]);
+    std::normal_distribution<double> distN(mean, 25.);
+	double new_value = distN(generator);
+	new_value = round(new_value);
+	if(new_value > 255) {new_value = 255;}
+	if(new_value < 10) {new_value = 10;}
 	
-	/*
-	bool newArray[m_dim][m_dim]{};
-	
-	for(int i = 0; i < m_dim; i++)
-	{
-		for(int j = 0; j < m_dim; j++)
-		{
-			if(verif(i, j))
-				newArray[i][j] = verif(i, j);
-		}
-	}
-	
-	for(int i = 0; i < m_dim; i++)
-	{
-		for(int j = 0; j < m_dim; j++)
-		{
-			if(newArray[i][j] != m_table[i][j])
-				modif(i,j);
-		}
-	}
-	*/
+	modif(m_cursor[0], m_cursor[1], new_value);
 }
 
 
-float Grid::getNeighboorMid(const int x, const int y) const
+float Grid::getNeighboorMean(const int x, const int y) const
 {
 	float res=0;
 	int count=0;
@@ -109,16 +97,16 @@ float Grid::getNeighboorMid(const int x, const int y) const
 	if(x == 0 || x == m_dim-1 || y == 0 || y == m_dim-1) { res = 0; }
 	else {
 		// Voisins des cotés ?
-		if( x-1 != 0 ) { res += m_table[x-1][y]; count++; }
-		if( x+1 != m_dim-1 ) { res += m_table[x+1][y]; count++; }
-		if( y-1 != 0 ) { res += m_table[x][y-1]; count++; }
-		if( y+1 != m_dim-1 ) { res += m_table[x][y+1]; count++; }
+		if( x-1 != 0 && m_table[x-1][y] != 0) { res += m_table[x-1][y]; count++; }
+		if( x+1 != m_dim-1 && m_table[x+1][y] != 0) { res += m_table[x+1][y]; count++; }
+		if( y-1 != 0 && m_table[x][y-1] != 0) { res += m_table[x][y-1]; count++; }
+		if( y+1 != m_dim-1 && m_table[x][y+1] != 0) { res += m_table[x][y+1]; count++; }
 
 		// Voisins des diagonales ? 
-		if( x-1 != 0 && y-1 != 0 ) { res += m_table[x-1][y-1]; count++; }
-		if( x+1 != 0 && y+1 != 0 ) { res += m_table[x+1][y+1]; count++; }
-		if( x-1 != 0 && y+1 != 0 ) { res += m_table[x-1][y+1]; count++; }
-		if( x+1 != 0 && y-1 != 0 ) { res += m_table[x+1][y-1]; count++; }
+		if( x-1 != 0 && y-1 != 0 && m_table[x-1][y-1] != 0) { res += m_table[x-1][y-1]; count++; }
+		if( x+1 != m_dim-1 && y+1 != m_dim-1 && m_table[x+1][y+1] != 0) { res += m_table[x+1][y+1]; count++; }
+		if( x-1 != 0 && y+1 != m_dim-1 && m_table[x-1][y+1] != 0) { res += m_table[x-1][y+1]; count++; }
+		if( x+1 != m_dim-1 && y-1 != 0 && m_table[x+1][y-1] != 0) { res += m_table[x+1][y-1]; count++; }
 
 		res /= count; 
 	}

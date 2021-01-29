@@ -4,6 +4,8 @@
 #include <SFML/Graphics.hpp>
 #include <chrono>
 #include <vector>
+#include <random>
+#include <iostream>
 
 class Grid : public sf::Drawable
 {
@@ -18,7 +20,7 @@ public :
 	
 	Grid();
 	void update();
-	float getNeighboorMid(const int x, const int y) const;
+	float getNeighboorMean(const int x, const int y) const;
 
 private :
 	
@@ -28,11 +30,12 @@ private :
 	
 private :
 	
-	static constexpr int m_dim = 12;
+	static constexpr int m_dim = 202;
 	int m_table[m_dim][m_dim]{};
 	std::vector<unsigned> m_cursor;
 	Direction m_direction;
 	unsigned m_level;
+	unsigned m_seed;
 };
 
 #endif // GRID_H
