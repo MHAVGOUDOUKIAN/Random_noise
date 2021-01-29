@@ -18,7 +18,8 @@ public :
 	
 	Grid();
 	void update();
-	
+	float getNeighboorMid(const int x, const int y) const;
+
 private :
 	
 	virtual void draw(sf::RenderTarget&, sf::RenderStates) const;
